@@ -4,10 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"net"
 	"net/http"
-	"net/url"
-	"time"
 )
 
 type TelegramPoster struct {
@@ -42,18 +39,7 @@ func (m *TelegramPoster) Send(msg string) error {
 	}
 	req.Header.Set("Content-Type", "application/json")
 	// 发送请求
-	client := &http.Client{
-		Transport: &http.Transport{
-			Proxy: func(req *http.Request) (*url.URL, error) {
-				return url.Parse("socks5://127.0.0.1:4781")
-				return nil, nil
-			},
-			Dial: (&net.Dialer{
-				Timeout: 10 * time.Second,
-			}).Dial,
-		},
-		Timeout: 10 * time.Second,
-	}
+	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
